@@ -1,0 +1,22 @@
+{% extends "base.html" %}{% from "_macros.html" import status %}{% block content %}
+<div class="page-head"><div><h1>Mark Attendance</h1><p class="muted">{{ sub.name }}</p></div></div>
+<form method="get" class="card toolbar">
+<div><label>Class</label><select name="class_name">{% for c in classes %}<option {{ 'selected' if c==cls }}>{{ c }}</option>{% endfor %}</select></div>
+<div><label>Date</label><input type="date" name="day" value="{{ day }}"></div><button class="btn">Load</button></form>
+{% if editable %}<div class="alert ok">Editing is open. You can change today's attendance until <b>11:59 PM</b>; after that it locks.</div>
+{% else %}<div class="alert locked"><b>{{ day }} is locked.</b> Attendance can only be edited on the same day (today is {{ today }}).</div>{% endif %}
+<form method="post" class="card">
+<input type="hidden" name="class_name" value="{{ cls }}"><input type="hidden" name="day" value="{{ day }}">
+<div class="card-head"><h3>{{ cls }} · {{ day }}</h3>
+{% if editable %}<div class="tally"><span id="tally"></span><label class="check-all"><input type="checkbox" id="all"> Mark all present</label></div>{% endif %}</div>
+<div class="table-wrap"><table><thead><tr><th>Roll No</th><th>Name</th><th class="right">{{ 'Present' if editable else 'Status' }}</th></tr></thead><tbody>
+{% for r in rows %}<tr><td class="muted">{{ r.username }}</td><td><b>{{ r.name }}</b></td><td class="right">
+{% if editable %}<label class="switch"><input class="p" type="checkbox" name="present_{{ r.id }}" {{ 'checked' if r.status in (None,'Present') }}><span></span></label>
+{% else %}{{ status(r.status) }}{% endif %}</td></tr>
+{% else %}<tr><td colspan="3" class="muted">No students in this class.</td></tr>{% endfor %}</tbody></table></div>
+{% if editable %}<div class="form-foot"><button class="btn">Save attendance</button></div>{% endif %}</form>
+{% if editable %}<script>
+const boxes=[...document.querySelectorAll('.p')],all=document.getElementById('all'),tally=document.getElementById('tally');
+function upd(){const n=boxes.filter(b=>b.checked).length;tally.textContent=n+' present · '+(boxes.length-n)+' absent';all.checked=n===boxes.length}
+boxes.forEach(b=>b.onchange=upd);all.onchange=()=>{boxes.forEach(b=>b.checked=all.checked);upd()};upd();
+</script>{% endif %}{% endblock %}

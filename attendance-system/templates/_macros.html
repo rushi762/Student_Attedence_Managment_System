@@ -1,0 +1,5 @@
+{% macro pbar(percent, total, threshold) %}
+<div class="pcell"><div class="pbar"><span class="{{ 'low' if total and percent < threshold else 'high' }}" style="width: {{ percent }}%"></span></div>
+<b class="{{ 'txt-bad' if total and percent < threshold else 'txt-ok' }}">{{ percent }}%</b></div>
+{% endmacro %}
+{% macro status(s) %}{% if s == 'Present' %}<span class="badge ok">Present</span>{% elif s == 'Absent' %}<span class="badge bad">Absent</span>{% else %}<span class="badge muted">Not marked</span>{% endif %}{% endmacro %}

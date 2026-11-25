@@ -1,0 +1,15 @@
+{% extends "base.html" %}{% block title %}{{ role|capitalize }} Registration{% endblock %}{% block content %}
+<div class="auth">
+  <div class="auth-side"><h2>Create your {{ role }} account</h2>
+    <p>{{ 'Register with your roll number and class to start tracking attendance.' if role=='student' else 'Register with your employee ID and the subject you teach.' }}</p></div>
+  <form method="post" class="auth-form"><h2>Register</h2>
+    <label>Full name</label><input name="name" required>
+    <label>{{ 'Roll No' if role=='student' else 'Employee ID' }}</label><input name="username" required>
+    {% if role=='student' %}<label>Class</label><input name="class_name" placeholder="CSE-A" value="CSE-A">
+    {% else %}<label>Subject you teach</label><input name="subject" list="subs" required placeholder="e.g. Data Structures">
+    <datalist id="subs">{% for s in ['Data Structures','Algorithms','Database Systems','Operating Systems','Computer Networks'] %}<option value="{{ s }}">{% endfor %}</datalist>{% endif %}
+    <div class="two"><div><label>Password</label><input name="password" type="password" minlength="6" required></div>
+    <div><label>Confirm</label><input name="confirm" type="password" minlength="6" required></div></div>
+    <button class="btn block">Create account</button>
+    <p class="alt-link">Already registered? <a href="{{ url_for('login', role=role) }}">Sign in</a></p>
+  </form></div>{% endblock %}

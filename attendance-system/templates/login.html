@@ -1,0 +1,13 @@
+{% extends "base.html" %}{% block title %}{{ role|capitalize }} Login{% endblock %}{% block content %}
+<div class="auth">
+  <div class="auth-side"><h2>{{ role|capitalize }} Portal</h2>
+    <p>{{ 'Check your attendance in every subject and stay above the required percentage.' if role=='student' else 'Mark attendance, correct entries on the same day, and download class sheets.' }}</p></div>
+  <form method="post" class="auth-form"><h2>Sign in</h2><p class="muted">Use your {{ 'roll number' if role=='student' else 'employee ID' }} to continue.</p>
+    <label>{{ 'Roll No' if role=='student' else 'Employee ID' }}</label>
+    <input name="username" placeholder="{{ 'S001' if role=='student' else 'T01' }}" required autofocus>
+    <label>Password</label><input name="password" type="password" placeholder="••••••••" required>
+    <button class="btn block">Sign in</button>
+    <p class="alt-link">New here? <a href="{{ url_for('register', role=role) }}">Create an account</a></p>
+    <p class="alt-link"><a href="{{ url_for('login', role='teacher' if role=='student' else 'student') }}">Go to {{ 'Teacher' if role=='student' else 'Student' }} portal</a></p>
+    <div class="hint">Demo: <code>{{ 'S001' if role=='student' else 'T01' }}</code> / <code>{{ 'student123' if role=='student' else 'teacher123' }}</code></div>
+  </form></div>{% endblock %}

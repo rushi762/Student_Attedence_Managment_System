@@ -1,0 +1,15 @@
+{% extends "base.html" %}{% block content %}
+<section class="hero"><h1>Student Attendance<br>Management System</h1>
+<p>Track attendance subject by subject, keep records accurate with same-day editing, and export clean sheets in one click.</p></section>
+<div class="portal-grid">
+  <div class="card portal"><div class="portal-ico">{{ ico('user') }}</div><h2>Student Portal</h2>
+    <p class="muted">View your attendance for every subject, see where you stand against the {{ threshold }}% requirement, and download your sheet.</p>
+    <div class="actions"><a class="btn" href="{{ url_for('login', role='student') }}">Student Login</a><a class="btn btn-outline" href="{{ url_for('register', role='student') }}">Register</a></div></div>
+  <div class="card portal"><div class="portal-ico">{{ ico('users') }}</div><h2>Teacher Portal</h2>
+    <p class="muted">Mark attendance for your classes, make corrections on the same day, and export class-wise attendance sheets.</p>
+    <div class="actions"><a class="btn" href="{{ url_for('login', role='teacher') }}">Teacher Login</a><a class="btn btn-outline" href="{{ url_for('register', role='teacher') }}">Register</a></div></div>
+</div>
+<div class="card demo"><b>Demo accounts</b>
+<span>Students <code>S001</code>–<code>S020</code> · password <code>student123</code></span>
+<span>Teachers <code>T01</code>–<code>T10</code> · password <code>teacher123</code></span></div>
+{% endblock %}

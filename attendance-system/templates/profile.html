@@ -1,0 +1,15 @@
+{% extends "base.html" %}{% from "_macros.html" import pbar %}{% block content %}
+<div class="page-head"><div class="profile-head"><div class="avatar lg">{{ s.name[0] }}</div>
+<div><h1>{{ s.name }}</h1><p class="muted">Roll No {{ s.username }} · Class {{ s.class_name }}</p></div></div>
+{% if me.role == 'student' %}<a class="btn" href="{{ url_for('student_sheet') }}">{{ ico('download') }}Download sheet</a>{% endif %}</div>
+<div class="grid-3">
+  <div class="card stat {{ 'bad' if total and overall < threshold else 'ok' }}"><span>Overall attendance</span><b>{{ overall }}%</b><small>{{ 'Below the ' ~ threshold ~ '% requirement' if total and overall < threshold else 'Meets the ' ~ threshold ~ '% requirement' }}</small></div>
+  <div class="card stat"><span>Classes attended</span><b>{{ present }}</b><small>across all subjects</small></div>
+  <div class="card stat"><span>Total classes held</span><b>{{ total }}</b><small>{{ total - present }} missed</small></div>
+</div>
+<div class="card"><div class="card-head"><h3>Subject-wise attendance</h3></div>
+<div class="table-wrap"><table><thead><tr><th>Subject</th><th>Teacher</th><th class="num">Held</th><th class="num">Present</th><th class="num">Absent</th><th style="width:210px">Attendance</th><th></th></tr></thead><tbody>
+{% for x in stats %}<tr><td><b>{{ x.name }}</b></td><td class="muted">{{ x.teacher or '-' }}</td><td class="num">{{ x.total }}</td><td class="num">{{ x.present }}</td><td class="num">{{ x.total - x.present }}</td>
+<td>{{ pbar(x.percent, x.total, threshold) }}</td>
+<td class="right"><a class="link" href="{{ url_for('profile_subject', sid=s.id, sub_id=x.id) }}">Day-wise →</a></td></tr>{% endfor %}</tbody></table></div></div>
+{% endblock %}

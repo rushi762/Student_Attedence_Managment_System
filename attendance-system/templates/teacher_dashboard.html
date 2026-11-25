@@ -1,0 +1,18 @@
+{% extends "base.html" %}{% from "_macros.html" import pbar %}{% block content %}
+<div class="page-head"><div><h1>{{ sub.name }}</h1><p class="muted">Welcome back, {{ me.name }}</p></div>
+<div class="actions"><a class="btn btn-outline" href="{{ url_for('teacher_sheet') }}">{{ ico('download') }}Download sheet</a>
+<a class="btn" href="{{ url_for('teacher_attendance') }}">{{ ico('check') }}Mark attendance</a></div></div>
+<div class="grid-4">
+  <div class="card stat"><span>Students</span><b>{{ rows|length }}</b></div>
+  <div class="card stat"><span>Class days held</span><b>{{ held }}</b></div>
+  <div class="card stat"><span>Average attendance</span><b>{{ avg }}%</b></div>
+  <div class="card stat {{ 'ok' if marked_today else 'warn' }}"><span>Today's attendance</span><b>{{ 'Done' if marked_today else 'Pending' }}</b></div></div>
+<div class="grid-2">
+<div class="card"><div class="card-head"><h3>Recent sessions</h3></div><div class="table-wrap"><table><thead><tr><th>Date</th><th class="num">Present</th><th class="num">Absent</th><th></th></tr></thead><tbody>
+{% for s in sessions %}<tr><td>{{ s.day }}{% if s.day == today %} <span class="badge info">Today</span>{% endif %}</td><td class="num">{{ s.p }}</td><td class="num">{{ s.n - s.p }}</td>
+<td class="right"><a class="link" href="{{ url_for('teacher_attendance', day=s.day) }}">{{ 'Edit' if s.day == today else 'View' }}</a></td></tr>
+{% else %}<tr><td colspan="4" class="muted">No sessions yet.</td></tr>{% endfor %}</tbody></table></div></div>
+<div class="card"><div class="card-head"><h3>Below {{ threshold }}% attendance</h3><span class="badge bad">{{ low|length }}</span></div><div class="table-wrap"><table><thead><tr><th>Student</th><th>Class</th><th style="width:170px">Attendance</th></tr></thead><tbody>
+{% for r in low %}<tr><td><a class="link" href="{{ url_for('profile', sid=r.id) }}">{{ r.name }}</a><div class="muted sm">{{ r.username }}</div></td><td>{{ r.class_name }}</td><td>{{ pbar(r.percent, r.total, threshold) }}</td></tr>
+{% else %}<tr><td colspan="3" class="muted">Nobody is below the threshold.</td></tr>{% endfor %}</tbody></table></div></div>
+</div>{% endblock %}

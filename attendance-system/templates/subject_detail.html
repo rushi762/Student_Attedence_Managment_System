@@ -1,0 +1,10 @@
+{% extends "base.html" %}{% from "_macros.html" import pbar, status %}{% block content %}
+<a class="back" href="{{ url_for('profile', sid=s.id) }}">← Back to profile</a>
+<div class="page-head"><div><h1>{{ sub.name }}</h1><p class="muted">{{ s.name }} · {{ s.username }}</p></div></div>
+<div class="grid-3">
+  <div class="card stat {{ 'bad' if total and percent < threshold else 'ok' }}"><span>Attendance</span><b>{{ percent }}%</b></div>
+  <div class="card stat"><span>Present</span><b>{{ present }}</b></div>
+  <div class="card stat"><span>Absent</span><b>{{ total - present }}</b></div></div>
+<div class="card"><div class="card-head"><h3>Day-wise record</h3></div><div class="table-wrap"><table><thead><tr><th>Date</th><th>Status</th></tr></thead><tbody>
+{% for r in rows %}<tr><td>{{ r.day }}</td><td>{{ status(r.status) }}</td></tr>
+{% else %}<tr><td colspan="2" class="muted">No classes recorded yet.</td></tr>{% endfor %}</tbody></table></div></div>{% endblock %}
